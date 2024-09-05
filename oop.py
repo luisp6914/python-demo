@@ -6,14 +6,38 @@ class Employee:
     def __init__(self, first, last, pay) -> None:
         self.first = first
         self.last = last
-        self.email = first + '.' + last + '@email.com'
         self.pay = pay
 
+    @property
+    def email(self):
+        return '{}.{}email.com'.format(self.first, self.last)
+    @property
     def fullname(self):
         return f'{self.first} {self.last}'
     
+    @fullname.setter
+    def fullname(self, name):
+        first, last = name.split(' ')
+        self.first = first
+        self.last = last
+    
+    @fullname.deleter
+    def fullname(self):
+        print("Delete Name")
+        self.first = None
+        self.last = None
+
     def apply_raise(self):
         self.pay = int(self.pay * self.raise_amt)
+
+    def __repr__(self) -> str:
+        return "Employee('{}', '{}', {})".format(self.first, self.last, self.pay)
+    
+    def __str__(self) -> str:
+        return '{} - {}'.format(self.fullname(), self.email)
+    
+    def __add__(self, other):
+        return self.pay + other.pay
 
     @classmethod
     def set_raise_amt(cls, amount):
@@ -92,7 +116,7 @@ dev_2 = Developer('Test', 'Employee', 60000, 'Java')
 
 mgr_1 = Manager('Sue', 'Smith', 90000, [dev_1])
 
-print(isinstance(mgr_1, Developer))
+# print(isinstance(mgr_1, Developer))
 
 # print(mgr_1.email)
 
@@ -110,4 +134,12 @@ print(isinstance(mgr_1, Developer))
 
 '''Special (Magic/Dunder) Methods'''
 
+#repr is supposed to be unambigious represenation of the object and used for debugging 
+# print(emp_1)
+# print(repr(emp_1))
 
+#str is supposed to be a nice representation of the object and used for user interface
+# print(str(emp_1))
+
+#dunder __add__ method 
+print(emp_1 + emp_2)
